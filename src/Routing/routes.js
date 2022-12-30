@@ -20,8 +20,8 @@ const Layout = () => {
       </Box>
       <Box
         sx={{
-          overflowY: "scroll",
           height: { xs: "83vh", md: "90vh" },
+          overflowY: "scroll",
         }}
       >
         <Outlet />

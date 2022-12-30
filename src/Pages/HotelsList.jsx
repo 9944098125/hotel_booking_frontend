@@ -28,7 +28,6 @@ function HotelsList() {
           display: "flex",
           justifyContent: "center",
           mt: 5,
-          pl: 1.5,
         }}
       >
         {/* row of search and hotels list */}
@@ -37,20 +36,19 @@ function HotelsList() {
             width: "100%",
             maxWidth: "1024px",
             display: "flex",
-            flexDirection: { xs: "column", md: "row" },
-            alignItems: { xs: "center", md: "space-between" },
             gap: "20px",
           }}
         >
           {/* search component */}
           <Box
             sx={{
-              flex: { xs: "3", md: "1" },
+              flex: "1",
               backgroundColor: "secondary.main",
               p: 2,
               borderRadius: "10px",
               top: "20px",
               position: "sticky",
+              height: "max-content",
               mb: 5,
             }}
           >
