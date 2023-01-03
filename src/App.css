@@ -11,6 +11,8 @@
     .date {
       width: 80vw !important;
       font-size: 8px !important;
+      position: absolute;
+      top:100px;
     }
   }
   .dateInSearchComponent {

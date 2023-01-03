@@ -1,7 +1,20 @@
-import React, { Fragment } from "react";
-import { Box, Typography } from "@mui/material";
+import React, { Fragment, useEffect } from "react";
+import { Box, CircularProgress, Typography } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { featuredHotelsAction } from "../Redux/Actions/featuredHotels";
 
 function Featured() {
+  const dispatch = useDispatch();
+  const cities = ["Kakinada", "Pune", "Mumbai"];
+
+  const FeaturedHotelsCount = useSelector(
+    (state) => state.featuredHotelsCountByCityTypesAndQuery
+  );
+
+  useEffect(() => {
+    dispatch(featuredHotelsAction(cities));
+  }, [dispatch]);
+
   return (
     <Fragment>
       {/* features container */}
@@ -18,63 +31,77 @@ function Featured() {
         }}
       >
         {/* each item */}
-        <Box
-          sx={{
-            position: "relative",
-            height: "250px",
-            color: "white",
-            borderRadius: "10px",
-            overflow: "hidden",
-          }}
-        >
-          <img
-            src="https://images.unsplash.com/photo-1615460549969-36fa19521a4f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mzl8fGhvdGVsfGVufDB8fDB8fA%3D%3D&w=1000&q=80"
-            style={{ width: "100%", objectFit: "cover", height: "100%" }}
-            alt="featuredImage1"
-          />
-          <Box sx={{ position: "absolute", bottom: "20px", left: "20px" }}>
-            <Typography sx={{}}>Mumbai</Typography>
-            <Typography sx={{}}>123 Properties</Typography>
+        {FeaturedHotelsCount.loading ? (
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <CircularProgress sx={{ height: "30px" }} />
           </Box>
-        </Box>
-        <Box
-          sx={{
-            position: "relative",
-            height: "250px",
-            color: "white",
-            borderRadius: "10px",
-            overflow: "hidden",
-          }}
-        >
-          <img
-            src="https://www.royalorchidhotels.com/images/propertygallery/04_Nov_2022_06_33_01Deluxe%20Twin%20Room.jpg"
-            style={{ width: "100%", objectFit: "cover", height: "100%" }}
-            alt="featuredImage2"
-          />
-          <Box sx={{ position: "absolute", bottom: "20px", left: "20px" }}>
-            <Typography sx={{}}>Hyderabad</Typography>
-            <Typography sx={{}}>156 Properties</Typography>
-          </Box>
-        </Box>
-        <Box
-          sx={{
-            position: "relative",
-            height: "250px",
-            color: "white",
-            borderRadius: "10px",
-            overflow: "hidden",
-          }}
-        >
-          <img
-            src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8aG90ZWx8ZW58MHx8MHx8&w=1000&q=80"
-            style={{ width: "100%", objectFit: "cover", height: "100%" }}
-            alt="featuredImage3"
-          />
-          <Box sx={{ position: "absolute", bottom: "20px", left: "20px" }}>
-            <Typography sx={{}}>Bengaluru</Typography>
-            <Typography sx={{}}>27 Properties</Typography>
-          </Box>
-        </Box>
+        ) : (
+          <>
+            <Box
+              sx={{
+                position: "relative",
+                height: "250px",
+                color: "white",
+                borderRadius: "10px",
+                overflow: "hidden",
+              }}
+            >
+              <img
+                src="https://images.unsplash.com/photo-1615460549969-36fa19521a4f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mzl8fGhvdGVsfGVufDB8fDB8fA%3D%3D&w=1000&q=80"
+                style={{ width: "100%", objectFit: "cover", height: "100%" }}
+                alt="featuredImage1"
+              />
+              <Box sx={{ position: "absolute", bottom: "20px", left: "20px" }}>
+                <Typography sx={{}}>Kakinada</Typography>
+                <Typography sx={{}}>
+                  {FeaturedHotelsCount.hotels[0]} Properties
+                </Typography>
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                position: "relative",
+                height: "250px",
+                color: "white",
+                borderRadius: "10px",
+                overflow: "hidden",
+              }}
+            >
+              <img
+                src="https://www.royalorchidhotels.com/images/propertygallery/04_Nov_2022_06_33_01Deluxe%20Twin%20Room.jpg"
+                style={{ width: "100%", objectFit: "cover", height: "100%" }}
+                alt="featuredImage2"
+              />
+              <Box sx={{ position: "absolute", bottom: "20px", left: "20px" }}>
+                <Typography sx={{}}>Pune</Typography>
+                <Typography sx={{}}>
+                  {FeaturedHotelsCount.hotels[1]} Properties
+                </Typography>
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                position: "relative",
+                height: "250px",
+                color: "white",
+                borderRadius: "10px",
+                overflow: "hidden",
+              }}
+            >
+              <img
+                src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8aG90ZWx8ZW58MHx8MHx8&w=1000&q=80"
+                style={{ width: "100%", objectFit: "cover", height: "100%" }}
+                alt="featuredImage3"
+              />
+              <Box sx={{ position: "absolute", bottom: "20px", left: "20px" }}>
+                <Typography sx={{}}>Mumbai</Typography>
+                <Typography sx={{}}>
+                  {FeaturedHotelsCount.hotels[2]} Properties
+                </Typography>
+              </Box>
+            </Box>
+          </>
+        )}
       </Box>
     </Fragment>
   );

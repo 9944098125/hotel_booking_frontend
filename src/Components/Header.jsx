@@ -13,9 +13,12 @@ import "react-date-range/dist/theme/default.css";
 import { DateRange } from "react-date-range";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { searchState } from "../Redux/Actions/globalState";
 
 function Header({ type }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [destination, setDestination] = useState("");
   const [date, setDate] = useState([
     {
@@ -27,9 +30,9 @@ function Header({ type }) {
   const [showCalendar, setShowCalendar] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const [options, setOptions] = useState({
-    adults: "2",
-    children: "0",
-    room: "1",
+    adults: 1,
+    children: 0,
+    room: 1,
   });
 
   const toggleCalendar = () => {
@@ -51,6 +54,12 @@ function Header({ type }) {
   };
 
   const handleSearch = () => {
+    const data = {
+      destination,
+      date,
+      options,
+    };
+    dispatch(searchState(data));
     navigate("/hotels", { state: { destination, date, options } });
   };
 
@@ -225,8 +234,9 @@ function Header({ type }) {
                   backgroundColor: "white",
                   color: "black",
                   position: "absolute",
+                  gap: 2,
                   bottom: "-25px",
-                  p: { xs: "none", md: "5px 10px" },
+                  p: { xs: "5px", md: "5px 10px" },
                   ml: { xs: -8, md: 0 },
                   width: "90vw",
                   maxWidth: "1024px",

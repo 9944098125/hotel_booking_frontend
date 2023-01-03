@@ -1,22 +1,50 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
-import React, { Fragment, useState } from "react";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  TextField,
+  Typography,
+} from "@mui/material";
+import React, { Fragment, useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Header from "../Components/Header";
 import { format } from "date-fns";
 import { DateRange } from "react-date-range";
 import SearchItems from "../Components/SearchItems";
+import { useDispatch, useSelector } from "react-redux";
+import { getFeaturedProperties } from "../Redux/Actions/featuredHotels";
 
 function HotelsList() {
   const location = useLocation();
+  const dispatch = useDispatch();
 
   const [destination, setDestination] = useState(location.state.destination);
   const [date, setDate] = useState(location.state.date);
   const [options, setOptions] = useState(location.state.options);
+  const [max, setMax] = useState(undefined);
+  const [min, setMin] = useState(undefined);
 
   const [showDateRange, setShowDateRange] = useState(false);
 
+  useEffect(() => {
+    dispatch(getFeaturedProperties(`city=${destination}`));
+  }, [dispatch, destination, min, max]);
+
+  const HotelsWithQuery = useSelector(
+    (state) => state.featuredHotelsCountByCityTypesAndQuery
+  );
+  // console.log("hotels by city", HotelsWithQuery.featuredHotels);
+
   const toggleShowDateRange = () => {
     setShowDateRange(!showDateRange);
+  };
+
+  const clickSearch = () => {
+    dispatch(
+      getFeaturedProperties(
+        `city=${destination}&min=${min || 0}&max=${max || 9999}`
+      )
+    );
   };
   // console.log(location);
   return (
@@ -26,7 +54,8 @@ function HotelsList() {
       <Box
         sx={{
           display: "flex",
-          justifyContent: "center",
+          flexDirection: "column",
+          alignItems: "center",
           mt: 5,
         }}
       >
@@ -36,18 +65,18 @@ function HotelsList() {
             width: "100%",
             maxWidth: "1024px",
             display: "flex",
+            flexDirection: "column",
             gap: "20px",
           }}
         >
           {/* search component */}
           <Box
             sx={{
-              flex: "1",
+              flex: "10",
               backgroundColor: "secondary.main",
               p: 2,
               borderRadius: "10px",
               top: "20px",
-              position: "sticky",
               height: "max-content",
               mb: 5,
             }}
@@ -149,7 +178,7 @@ function HotelsList() {
                     backgroundColor: "white",
                     borderRadius: "9px",
                   }}
-                  variant="standard"
+                  onChange={(e) => setMin(e.target.value)}
                 />
               </Box>
               <Box
@@ -183,7 +212,7 @@ function HotelsList() {
                     backgroundColor: "white",
                     borderRadius: "9px",
                   }}
-                  variant="standard"
+                  onChange={(e) => setMax(e.target.value)}
                 />
               </Box>
               <Box
@@ -275,6 +304,7 @@ function HotelsList() {
               </Box>
             </Box>
             <Button
+              onClick={clickSearch}
               sx={{
                 width: "100%",
                 backgroundColor: "primary.dark",
@@ -290,9 +320,21 @@ function HotelsList() {
             </Button>
           </Box>
           {/* list component, result rooms for search */}
-          <Box sx={{ flex: "3", mt: 5 }}>
-            <SearchItems />
-          </Box>
+          {HotelsWithQuery.loading && <CircularProgress />}
+          {Array.isArray(HotelsWithQuery.featuredHotels) &&
+            HotelsWithQuery.featuredHotels.map((item, idx) => (
+              <Box
+                sx={{
+                  mt: 3,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+                key={idx}
+              >
+                <SearchItems item={item} />
+              </Box>
+            ))}
         </Box>
       </Box>
     </Fragment>

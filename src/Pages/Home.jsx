@@ -2,7 +2,6 @@ import { Box, Typography } from "@mui/material";
 import React from "react";
 import Featured from "../Components/Featured";
 import FeaturedProperties from "../Components/FeaturedProperties";
-import Footer from "../Components/Footer";
 import Header from "../Components/Header";
 import MailList from "../Components/MailList";
 import PropertyList from "../Components/PropertyList";

@@ -15,7 +15,8 @@ function Footer() {
         <Box
           sx={{
             display: "flex",
-            alignItems: "center",
+            flexDirection: { xs: "column", md: "row" },
+            alignItems: { xs: "flex-start", md: "center" },
             gap: "100px",
             p: 4,
             justifyContent: "space-between",

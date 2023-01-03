@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import React, { Fragment } from "react";
+import { Link } from "react-router-dom";
 
 function Navbar() {
   return (
@@ -17,16 +18,18 @@ function Navbar() {
       >
         {/* Head of the app */}
         <Box sx={{}}>
-          <Typography
-            sx={{
-              color: "white",
-              fontWeight: { xs: "500", md: "600" },
-              fontSize: { xs: "16px", md: "25px" },
-              cursor: "pointer",
-            }}
-          >
-            Sunset Suites
-          </Typography>
+          <Link to="/" style={{ color: "inherit", textDecoration: "none" }}>
+            <Typography
+              sx={{
+                color: "white",
+                fontWeight: { xs: "500", md: "600" },
+                fontSize: { xs: "16px", md: "25px" },
+                cursor: "pointer",
+              }}
+            >
+              Sunset Suites
+            </Typography>
+          </Link>
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", gap: "20px" }}>
           <Typography
