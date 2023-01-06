@@ -32,16 +32,21 @@ function Navbar() {
           </Link>
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", gap: "20px" }}>
-          <Typography
-            sx={{
-              color: "white",
-              fontSize: { xs: "10px", md: "18px" },
-              fontWeight: { xs: "300", md: "500" },
-              cursor: "pointer",
-            }}
+          <Link
+            to="/login"
+            style={{ textDecoration: "none", color: "inherit" }}
           >
-            Login
-          </Typography>
+            <Typography
+              sx={{
+                color: "white",
+                fontSize: { xs: "10px", md: "18px" },
+                fontWeight: { xs: "300", md: "500" },
+                cursor: "pointer",
+              }}
+            >
+              Login
+            </Typography>
+          </Link>
           <Typography
             sx={{
               color: "white",

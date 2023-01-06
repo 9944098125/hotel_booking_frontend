@@ -3,10 +3,12 @@ import { alert } from "./alertReducer";
 import featuredHotelsCountByCityTypesAndQuery from "./featuredHotels";
 import getHotel from "./getHotel";
 import searchState from "./globalState";
+import auth from "./loginReducer";
 
 export default combineReducers({
   alert,
   featuredHotelsCountByCityTypesAndQuery,
   getHotel,
   searchState,
+  auth,
 });
