@@ -13,6 +13,7 @@ export const loginAction = (data) => async (dispatch) => {
         type: LOGIN_SUCCESS,
         payload: res.data && res.data.details,
       });
+      console.log("login res", res);
     }
   } catch (err) {
     console.log("Login error in frontend: ", err);

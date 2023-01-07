@@ -9,7 +9,6 @@ function Footer() {
         sx={{
           backgroundColor: "primary.dark",
           borderTop: "2px solid white",
-          mt: 5,
         }}
       >
         <Box

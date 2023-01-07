@@ -35,6 +35,8 @@ function Header({ type }) {
     room: 1,
   });
 
+  const user = JSON.parse(localStorage.getItem("loggedInUser"));
+
   const toggleCalendar = () => {
     setShowCalendar(!showCalendar);
   };
@@ -208,21 +210,23 @@ function Header({ type }) {
                   Get Rewarded for your travels - unlock instant savings of 10%
                   or more with a free Sunset Suties Account.
                 </Typography>
-                <Button
-                  sx={{
-                    backgroundColor: "white",
-                    p: "5px 15px 5px 15px",
-                    borderRadius: "9px",
-                    border: "none",
-                    width: { xs: "100px", md: "150px" },
-                    fontSize: { xs: "12px", md: "18px" },
-                    "&:hover": {
+                {!user && (
+                  <Button
+                    sx={{
                       backgroundColor: "white",
-                    },
-                  }}
-                >
-                  Sign In
-                </Button>
+                      p: "5px 15px 5px 15px",
+                      borderRadius: "9px",
+                      border: "none",
+                      width: { xs: "100px", md: "150px" },
+                      fontSize: { xs: "12px", md: "18px" },
+                      "&:hover": {
+                        backgroundColor: "white",
+                      },
+                    }}
+                  >
+                    Sign In
+                  </Button>
+                )}
               </Box>
               <Box
                 sx={{

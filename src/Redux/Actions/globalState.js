@@ -1,4 +1,4 @@
-import { NEW_SEARCH, RESET_SEARCH } from "./Types";
+import { NEW_SEARCH } from "./Types";
 
 export const searchState = (data) => async (dispatch) => {
   try {

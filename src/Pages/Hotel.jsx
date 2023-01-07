@@ -6,23 +6,27 @@ import MailList from "../Components/MailList";
 import CloseIcon from "@mui/icons-material/Close";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getHotel } from "../Redux/Actions/getHotel";
-import { searchState } from "../Redux/Actions/globalState";
+import Reserve from "../Components/Reserve";
 
 function Hotel() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [slideNumber, setSlideNumber] = useState(0);
   const [show, setShow] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const location = useLocation();
   const hotelId = location.pathname.split("/")[2];
 
   const GetHotel = useSelector((state) => state.getHotel);
   const DDOState = useSelector((state) => state.searchState);
-  console.log(DDOState.date);
+  // console.log(DDOState.date);
+
+  const user = JSON.parse(localStorage.getItem("loggedInUser"));
 
   // const persistingDDO = useState(DDOState);
   // console.log("ddo", persistingDDO);
@@ -60,6 +64,14 @@ function Hotel() {
       newSlideNumber = slideNumber === 5 ? 0 : slideNumber + 1;
     }
     setSlideNumber(newSlideNumber);
+  };
+
+  const handleClickReserveHotelButton = () => {
+    if (user) {
+      setShowModal(!showModal);
+    } else {
+      navigate("/login");
+    }
   };
 
   return (
@@ -152,6 +164,7 @@ function Hotel() {
             }}
           >
             <Button
+              onClick={handleClickReserveHotelButton}
               sx={{
                 backgroundColor: "secondary.dark",
                 position: { xs: "static", md: "absolute" },
@@ -279,6 +292,7 @@ function Hotel() {
                   ({days}-nights)
                 </Typography>
                 <Button
+                  onClick={handleClickReserveHotelButton}
                   sx={{
                     backgroundColor: "secondary.dark",
                     color: "white",
@@ -296,6 +310,7 @@ function Hotel() {
           </Box>
         </Box>
       )}
+      {showModal && <Reserve setShowModal={setShowModal} hotelId={hotelId} />}
     </Fragment>
   );
 }

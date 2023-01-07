@@ -3,6 +3,8 @@ import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 
 function Navbar() {
+  const user = JSON.parse(localStorage.getItem("loggedInUser"));
+  // console.log("user", user);
   return (
     <Fragment>
       <Box
@@ -31,11 +33,33 @@ function Navbar() {
             </Typography>
           </Link>
         </Box>
-        <Box sx={{ display: "flex", alignItems: "center", gap: "20px" }}>
-          <Link
-            to="/login"
-            style={{ textDecoration: "none", color: "inherit" }}
+        {user !== null ? (
+          <Typography
+            sx={{
+              color: "white",
+              fontWeight: "700",
+              fontSize: { xs: "12px", md: "16px" },
+            }}
           >
+            {user.username}
+          </Typography>
+        ) : (
+          <Box sx={{ display: "flex", alignItems: "center", gap: "20px" }}>
+            <Link
+              to="/login"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <Typography
+                sx={{
+                  color: "white",
+                  fontSize: { xs: "10px", md: "18px" },
+                  fontWeight: { xs: "300", md: "500" },
+                  cursor: "pointer",
+                }}
+              >
+                Login
+              </Typography>
+            </Link>
             <Typography
               sx={{
                 color: "white",
@@ -44,20 +68,10 @@ function Navbar() {
                 cursor: "pointer",
               }}
             >
-              Login
+              Register
             </Typography>
-          </Link>
-          <Typography
-            sx={{
-              color: "white",
-              fontSize: { xs: "10px", md: "18px" },
-              fontWeight: { xs: "300", md: "500" },
-              cursor: "pointer",
-            }}
-          >
-            Register
-          </Typography>
-        </Box>
+          </Box>
+        )}
       </Box>
     </Fragment>
   );

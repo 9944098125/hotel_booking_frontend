@@ -4,6 +4,7 @@ import featuredHotelsCountByCityTypesAndQuery from "./featuredHotels";
 import getHotel from "./getHotel";
 import searchState from "./globalState";
 import auth from "./loginReducer";
+import fetchRooms from "./fetchRooms";
 
 export default combineReducers({
   alert,
@@ -11,4 +12,5 @@ export default combineReducers({
   getHotel,
   searchState,
   auth,
+  fetchRooms,
 });

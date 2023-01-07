@@ -14,6 +14,7 @@ export default function searchState(state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
     case NEW_SEARCH:
+      localStorage.setItem("ddo", JSON.stringify(payload));
       return payload;
     case RESET_SEARCH:
       return initialState;

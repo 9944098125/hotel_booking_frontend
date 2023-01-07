@@ -47,3 +47,95 @@
     height:80%;
     width:80%;
   }
+
+  .login-fields {
+    width:380px;
+    line-height: 1.75rem;
+    outline: none !important;
+    border-radius: 4px;
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: rgb(102, 114, 139) !important;
+    border: 0.2px solid rgb(92, 113, 141);
+    padding: 6px 25px;
+    background-color: #ffffff;
+  }
+  
+  @media screen and (max-width:768px) {
+    .login-fields  {
+      width: 300px;
+    }
+  }
+  
+  @media screen and (max-width:320px) {
+    .login-fields  {
+      width: 220px;
+    }
+  }
+  
+  .eye {
+    padding: 6px;
+    border: 0.2px solid rgb(121, 148, 179);
+    border-left: none;
+    margin-left: -35px;
+    background-color: white;
+    border-radius: 4px;
+  }
+  
+  .login-fields::placeholder {
+    color: #768eaf;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    font-family: "Roboto", sans-serif;
+    transform: scaleX(1.1);
+  }
+  
+  .form-control:active,
+  .form-control:focus {
+    border: 2.5px solid rgb(108, 95, 253);
+    outline: none;
+    box-shadow: none !important;
+  }
+  
+  .primary-button {
+    background-color: rgb(124 112 255 / 1);
+    line-height: 2.5rem;
+    border-radius: 4px;
+    color: white;
+    font-weight: 700;
+    margin-bottom: 20px;
+    border: none;
+    font-size: 1.125rem;
+    width: 100%;
+    transform:translate(0, 0) rotate(0) skewX(0) skewY(0) scaleX(1) scaleY(1);
+    cursor: pointer;
+  }
+  
+  .register-button {
+    background-color: #aa4444;
+    color: white;
+    width: 100%;
+    font-weight: 700;
+    border: none;
+    line-height: 2.5rem;
+    font-size: 1.125rem;
+    border-radius: 4px;
+    cursor: pointer;
+  
+  }
+  
+  .hoverParent {
+    min-height: 8rem;
+    max-height: 10rem;
+  }
+  
+  .primary-button:hover {
+    margin-top: -1px;
+    margin-bottom: 21px;
+  }
+  
+  .register-button:hover {
+    margin-top: -1px;
+    margin-bottom: 5px;
+  }
