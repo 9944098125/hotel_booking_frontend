@@ -18,8 +18,6 @@ function Login() {
     setShowPassword(!showPassword);
   };
 
-  const LoginDetails = useSelector((state) => state.auth);
-
   const validate = (values) => {
     let errors = {};
     if (!values.email) {

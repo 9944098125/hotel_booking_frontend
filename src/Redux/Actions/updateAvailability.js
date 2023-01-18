@@ -17,7 +17,7 @@ export const updateAvailability = (roomId, dates) => async (dispatch) => {
     if (res) {
       dispatch({
         type: UPDATE_AVAILABILITY_SUCCESS,
-        payload: res.data.message,
+        payload: res.data,
       });
       console.log("reserve res", res);
     }

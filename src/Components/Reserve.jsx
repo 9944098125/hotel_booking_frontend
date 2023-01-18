@@ -3,10 +3,12 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Box, Button, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchRooms } from "../Redux/Actions/fetchRooms";
-import { updateAvailability } from "../Redux/Actions/updateAvailability";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Reserve({ setShowModal, hotelId }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [selectedRooms, setSelectedRooms] = useState([]);
 
   useEffect(() => {
@@ -28,18 +30,8 @@ function Reserve({ setShowModal, hotelId }) {
         : selectedRooms.filter((room) => room !== value)
     );
   };
-  // console.log("selected rooms", selectedRooms);
+  console.log("selected rooms", selectedRooms);
   // console.log("rooms data", RoomsData);
-
-  const handleClick = async () => {
-    try {
-      await Promise.all(
-        selectedRooms.map((roomNoId) =>
-          dispatch(updateAvailability(roomNoId, allDates))
-        )
-      );
-    } catch (err) {}
-  };
 
   const getDatesInRange = (startDate, endDate) => {
     const start = new Date(startDate);
@@ -69,6 +61,24 @@ function Reserve({ setShowModal, hotelId }) {
   //   "date in range",
   //   getDatesInRange(DDOState.date[0].startDate, DDOState.date[0].endDate)
   // );
+
+  const handleClick = async () => {
+    try {
+      await Promise.all(
+        selectedRooms.map((roomId) => {
+          const res = axios.put(
+            `http://localhost:3499/api/rooms/updateRoomAvailability/${roomId}`,
+            {
+              dates: allDates,
+            }
+          );
+          return res.data;
+        })
+      );
+      setShowModal(false);
+      navigate("/");
+    } catch (err) {}
+  };
 
   return (
     <Fragment>
