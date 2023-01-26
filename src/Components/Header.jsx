@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useContext } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import HouseboatIcon from "@mui/icons-material/Houseboat";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
@@ -13,14 +13,12 @@ import "react-date-range/dist/theme/default.css";
 import { DateRange } from "react-date-range";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { searchState } from "../Redux/Actions/globalState";
+import { SearchContext } from "../Context/searchContext";
 
 function Header({ type }) {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [destination, setDestination] = useState("");
-  const [date, setDate] = useState([
+  const [dates, setDates] = useState([
     {
       startDate: new Date(),
       endDate: new Date(),
@@ -35,7 +33,7 @@ function Header({ type }) {
     room: 1,
   });
 
-  const user = JSON.parse(localStorage.getItem("loggedInUser"));
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const toggleCalendar = () => {
     setShowCalendar(!showCalendar);
@@ -55,15 +53,21 @@ function Header({ type }) {
     setShowOptions(!showOptions);
   };
 
+  const { dispatch } = useContext(SearchContext);
+
   const handleSearch = () => {
-    const data = {
-      destination,
-      date,
-      options,
-    };
-    dispatch(searchState(data));
-    navigate("/hotels", { state: { destination, date, options } });
+    dispatch({ type: "NEW_SEARCH", payload: { dates, destination, options } });
+    navigate("/hotels", { state: { destination, dates, options } });
   };
+
+  const login = () => {
+    navigate("/login");
+  };
+
+  function logout() {
+    localStorage.removeItem("user");
+    navigate("/login");
+  }
 
   return (
     <Fragment>
@@ -210,8 +214,9 @@ function Header({ type }) {
                   Get Rewarded for your travels - unlock instant savings of 10%
                   or more with a free Sunset Suties Account.
                 </Typography>
-                {!user && (
+                {!user ? (
                   <Button
+                    onClick={login}
                     sx={{
                       backgroundColor: "white",
                       p: "5px 15px 5px 15px",
@@ -225,6 +230,23 @@ function Header({ type }) {
                     }}
                   >
                     Sign In
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={logout}
+                    sx={{
+                      backgroundColor: "white",
+                      p: "5px 15px 5px 15px",
+                      borderRadius: "9px",
+                      border: "none",
+                      width: { xs: "100px", md: "150px" },
+                      fontSize: { xs: "12px", md: "18px" },
+                      "&:hover": {
+                        backgroundColor: "white",
+                      },
+                    }}
+                  >
+                    Sign Out
                   </Button>
                 )}
               </Box>
@@ -270,8 +292,8 @@ function Header({ type }) {
                 >
                   <CalendarMonthIcon />
                   <Typography sx={{ fontSize: "12px" }}>
-                    {`${format(date[0].startDate, "MM/dd/yyyy")} to ${format(
-                      date[0].endDate,
+                    {`${format(dates[0].startDate, "MM/dd/yyyy")} to ${format(
+                      dates[0].endDate,
                       "MM/dd/yyyy"
                     )}`}
                   </Typography>
@@ -279,9 +301,9 @@ function Header({ type }) {
                 {showCalendar && (
                   <DateRange
                     editableDateInputs={true}
-                    onChange={(item) => setDate([item.selection])}
+                    onChange={(item) => setDates([item.selection])}
                     moveRangeOnFirstSelection={false}
-                    ranges={date}
+                    ranges={dates}
                     className="date"
                   />
                 )}

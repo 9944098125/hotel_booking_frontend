@@ -1,20 +1,11 @@
 import React, { Fragment, useEffect } from "react";
 import { Box, CircularProgress, Typography } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import { countByType } from "../Redux/Actions/featuredHotels";
+import useFetch from "../Hooks/useFetch";
 
 function PropertyList() {
-  const dispatch = useDispatch();
-
-  const FeaturedHotelsTypes = useSelector(
-    (state) => state.featuredHotelsCountByCityTypesAndQuery
-  );
-
-  useEffect(() => {
-    dispatch(countByType());
-  }, [dispatch]);
-
   // console.log(FeaturedHotelsTypes.data);
+
+  const { data, error, loading } = useFetch("/hotels/countByType");
 
   const images = [
     "https://thumbs.dreamstime.com/b/hotel-rooms-8146308.jpg",
@@ -27,54 +18,59 @@ function PropertyList() {
   return (
     <Fragment>
       {/* property list */}
-      <Box
-        sx={{
-          width: "100%",
-          maxWidth: "1024px",
-          display: "flex",
-          flexDirection: { xs: "column", md: "row" },
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: "20px",
-        }}
-      >
-        {/* item */}
-        {FeaturedHotelsTypes.loading ? (
+      {loading ? (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <CircularProgress />
-        ) : (
-          Array.isArray(FeaturedHotelsTypes.data) &&
-          images.map((image, i) => (
-            <Box
-              key={i}
-              sx={{
-                borderRadius: "10px",
-                overflow: "hidden",
-                cursor: "pointer",
-                flex: "1",
-              }}
-            >
-              <img
-                src={image}
-                style={{
-                  objectFit: "cover",
-                  height: "150px",
-                  width: "100%",
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            width: "100%",
+            maxWidth: "1024px",
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "20px",
+          }}
+        >
+          {/* item */}
+          {data &&
+            images.map((image, i) => (
+              <Box
+                key={i}
+                sx={{
+                  borderRadius: "10px",
+                  overflow: "hidden",
+                  cursor: "pointer",
+                  flex: "1",
                 }}
-                alt="pl"
-              />
-              <Box sx={{ display: "flex", flexDirection: "column" }}>
-                <Typography sx={{ fontSize: "18px" }}>
-                  {FeaturedHotelsTypes.data[i]?.type}s{" "}
-                </Typography>
-                <Typography sx={{ fontSize: "16px" }}>
-                  {FeaturedHotelsTypes.data[i]?.count}{" "}
-                  {FeaturedHotelsTypes.data[i]?.type}
-                </Typography>
+              >
+                <img
+                  src={image}
+                  style={{
+                    objectFit: "cover",
+                    height: "150px",
+                    width: "100%",
+                  }}
+                  alt="pl"
+                />
+                <Box sx={{ display: "flex", flexDirection: "column" }}>
+                  <Typography sx={{ fontSize: "18px" }}>
+                    {data[i]?.count} {data[i]?.type}s
+                  </Typography>
+                  <Typography sx={{ fontSize: "16px" }}></Typography>
+                </Box>
               </Box>
-            </Box>
-          ))
-        )}
-      </Box>
+            ))}
+        </Box>
+      )}
     </Fragment>
   );
 }

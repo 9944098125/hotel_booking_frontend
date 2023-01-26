@@ -6,6 +6,7 @@ import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 import Login from "../Pages/Login";
 import { Box } from "@mui/material";
+import Registration from "../Pages/Registration";
 
 const Layout = () => {
   return (
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/register",
+        element: <Registration />,
       },
     ],
   },

@@ -11,28 +11,24 @@ import Header from "../Components/Header";
 import { format } from "date-fns";
 import { DateRange } from "react-date-range";
 import SearchItems from "../Components/SearchItems";
-import { useDispatch, useSelector } from "react-redux";
-import { getFeaturedProperties } from "../Redux/Actions/featuredHotels";
+import useFetch from "../Hooks/useFetch";
 
 function HotelsList() {
   const location = useLocation();
-  const dispatch = useDispatch();
 
   const [destination, setDestination] = useState(location.state.destination);
-  const [date, setDate] = useState(location.state.date);
+  const [dates, setDates] = useState(location.state.dates);
   const [options, setOptions] = useState(location.state.options);
   const [max, setMax] = useState(undefined);
   const [min, setMin] = useState(undefined);
 
+  const { data, loading, error, refetch } = useFetch(
+    `/hotels?city=${destination}&min=${min || 1}&max=${max || 99999}`
+  );
+  console.log(data);
+
   const [showDateRange, setShowDateRange] = useState(false);
 
-  useEffect(() => {
-    dispatch(getFeaturedProperties(`city=${destination}`));
-  }, [dispatch, destination, min, max]);
-
-  const HotelsWithQuery = useSelector(
-    (state) => state.featuredHotelsCountByCityTypesAndQuery
-  );
   // console.log("hotels by city", HotelsWithQuery.featuredHotels);
 
   const toggleShowDateRange = () => {
@@ -40,11 +36,7 @@ function HotelsList() {
   };
 
   const clickSearch = () => {
-    dispatch(
-      getFeaturedProperties(
-        `city=${destination}&min=${min || 0}&max=${max || 9999}`
-      )
-    );
+    refetch();
   };
   // console.log(location);
   return (
@@ -129,16 +121,16 @@ function HotelsList() {
                   height: { xs: "40px", md: "20px" },
                 }}
               >
-                {`${format(date[0].startDate, "MM/dd/yyyy")} to ${format(
-                  date[0].endDate,
+                {`${format(dates[0]?.startDate, "MM/dd/yyyy")} to ${format(
+                  dates[0]?.endDate,
                   "MM/dd/yyyy"
                 )}`}
               </Typography>
               {showDateRange && (
                 <DateRange
-                  onChange={(item) => setDate([item.selection])}
+                  onChange={(item) => setDates([item.selection])}
                   minDate={new Date()}
-                  ranges={date}
+                  ranges={dates}
                   className="dateInSearchComponent"
                 />
               )}
@@ -320,9 +312,9 @@ function HotelsList() {
             </Button>
           </Box>
           {/* list component, result rooms for search */}
-          {HotelsWithQuery.loading && <CircularProgress />}
-          {Array.isArray(HotelsWithQuery.featuredHotels) &&
-            HotelsWithQuery.featuredHotels.map((item, idx) => (
+          {loading && <CircularProgress />}
+          {data &&
+            data.map((item, idx) => (
               <Box
                 sx={{
                   mt: 3,

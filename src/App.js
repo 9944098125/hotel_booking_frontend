@@ -1,13 +1,15 @@
 import BaseRoutes from "./Routing/routes";
 import "./App.css";
-import { Provider } from "react-redux";
-import store from "./Redux/Store/Store";
+import { SearchContextProvider } from "./Context/searchContext";
+import { AuthContextProvider } from "./Context/AuthContext";
 
 function App() {
   return (
-    <Provider store={store}>
-      <BaseRoutes />
-    </Provider>
+    <AuthContextProvider>
+      <SearchContextProvider>
+        <BaseRoutes />
+      </SearchContextProvider>
+    </AuthContextProvider>
   );
 }
 

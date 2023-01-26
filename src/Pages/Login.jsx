@@ -1,18 +1,21 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useContext } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form, Field } from "formik";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-
-import { loginAction } from "../Redux/Actions/loginAction";
+import { AuthContext } from "../Context/AuthContext";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Login() {
-  const dispatch = useDispatch();
-  const [credentials, setCredentials] = useState({
+  const [credentials] = useState({
     email: "",
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
+
+  const { loading, error, dispatch } = useContext(AuthContext);
+
+  const navigate = useNavigate();
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -42,9 +45,14 @@ function Login() {
     return errors;
   };
 
-  const callLoginApi = (values) => {
-    if (values) {
-      dispatch(loginAction(values));
+  const callLoginApi = async (values) => {
+    dispatch({ type: "LOGIN_START" });
+    try {
+      const res = await axios.post("/auth/login", values);
+      dispatch({ type: "LOGIN_SUCCESS", payload: res.data.details });
+      navigate("/");
+    } catch (err) {
+      dispatch({ type: "LOGIN_FAIL", payload: err.response.data });
     }
   };
 
@@ -194,9 +202,14 @@ function Login() {
                       <button type="submit" className="primary-button">
                         Login
                       </button>
-                      <button className="register-button" type="button">
-                        Register
-                      </button>
+                      <Link
+                        to="/register"
+                        style={{ textDecoration: "none", color: "inherit" }}
+                      >
+                        <button className="register-button" type="button">
+                          Register
+                        </button>
+                      </Link>
                     </div>
                   </Form>
                 )}

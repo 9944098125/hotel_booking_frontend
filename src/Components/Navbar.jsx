@@ -1,10 +1,11 @@
 import { Box, Typography } from "@mui/material";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 function Navbar() {
-  const user = JSON.parse(localStorage.getItem("loggedInUser"));
+  const user = JSON.parse(localStorage.getItem("user"));
   // console.log("user", user);
+
   return (
     <Fragment>
       <Box
@@ -60,16 +61,21 @@ function Navbar() {
                 Login
               </Typography>
             </Link>
-            <Typography
-              sx={{
-                color: "white",
-                fontSize: { xs: "10px", md: "18px" },
-                fontWeight: { xs: "300", md: "500" },
-                cursor: "pointer",
-              }}
+            <Link
+              to="/register"
+              style={{ textDecoration: "none", color: "inherit" }}
             >
-              Register
-            </Typography>
+              <Typography
+                sx={{
+                  color: "white",
+                  fontSize: { xs: "10px", md: "18px" },
+                  fontWeight: { xs: "300", md: "500" },
+                  cursor: "pointer",
+                }}
+              >
+                Register
+              </Typography>
+            </Link>
           </Box>
         )}
       </Box>

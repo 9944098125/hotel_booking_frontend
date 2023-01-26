@@ -60,6 +60,19 @@
     padding: 6px 25px;
     background-color: #ffffff;
   }
+
+  .register-fields {
+    width:100%;
+    line-height: 1.75rem;
+    outline: none !important;
+    border-radius: 4px;
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: rgb(102, 114, 139) !important;
+    border: 0.2px solid rgb(92, 113, 141);
+    padding: 6px 25px;
+    background-color: #ffffff;
+  }
   
   @media screen and (max-width:768px) {
     .login-fields  {
@@ -139,3 +152,14 @@
     margin-top: -1px;
     margin-bottom: 5px;
   }
+
+  .react-tel-input .form-control {
+    height:38px !important;
+    width:100% !important;
+  }
+  .ReactFlagsSelect-module_selectBtn__19wW7 {
+    background-color: white !important;
+    height: 38px !important;
+    width: 100% !important;
+  }
+
