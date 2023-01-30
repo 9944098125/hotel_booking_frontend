@@ -7,7 +7,6 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { useNavigate } from "react-router-dom";
 import {
-  Description,
   GlassEffect,
   GlassEffectUpperPart,
   Linked,
@@ -15,7 +14,6 @@ import {
   Options,
   SignInHead,
   SubmitButton,
-  Title,
   TotalGlassContainer,
 } from "./styledComponents";
 import { CircularProgress } from "@mui/material";

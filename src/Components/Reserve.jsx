@@ -2,10 +2,8 @@ import React, { Fragment, useEffect, useState, useContext } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { Box, Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { getRooms, updateRoomAvailability } from "../Redux/Actions/getRooms";
-import { alertActions } from "../Redux/Actions/alertActions";
 import AlertModal from "./AlertModal";
 
 function Reserve({ setShowModal, hotelId }) {
