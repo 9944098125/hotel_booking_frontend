@@ -6,7 +6,6 @@ import ReactFlagsSelect from "react-flags-select";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import {
   Description,
   GlassEffect,
@@ -20,8 +19,12 @@ import {
   TotalGlassContainer,
 } from "./styledComponents";
 import { CircularProgress } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { register } from "../Redux/Actions/register";
+import AlertModal from "../Components/AlertModal";
 
 function SignUp() {
+  const dispatch = useDispatch();
   const Navigate = useNavigate();
   const initialValues = {
     firstName: "",
@@ -40,6 +43,9 @@ function SignUp() {
   const [code, setCode] = useState("");
   const [validateCountry, setValidateCountry] = useState(false);
   const [url, setUrl] = useState("");
+
+  const Alert = useSelector((state) => state.alert);
+  const Registration = useSelector((state) => state.register);
 
   const validate = (values) => {
     let errors = {};
@@ -123,7 +129,7 @@ function SignUp() {
     }
   };
 
-  const callRegisterApi = async (values) => {
+  const callRegisterApi = (values) => {
     if (selected === "" || value === "") {
       return;
     }
@@ -137,18 +143,21 @@ function SignUp() {
       profilePicture: url,
     };
     console.log("url", url);
-
-    try {
-      await axios.post("/auth/register", data);
-      Navigate("/login");
-    } catch (err) {
-      console.log(err);
-    }
+    dispatch(register(data));
   };
+
+  useEffect(() => {
+    if (Alert.type === "success") {
+      setTimeout(() => {
+        Navigate("/login");
+      }, 3000);
+    }
+  }, [Alert, Navigate]);
 
   return (
     <Fragment>
       <LoginContainer style={{ paddingLeft: "10%" }}>
+        {Alert.message && <AlertModal show={true} />}
         <TotalGlassContainer reg>
           <GlassEffectUpperPart>
             <div className="d-flex align-items-center">
@@ -399,7 +408,12 @@ function SignUp() {
                     </div>
 
                     <div className="form-group text-center mb-2">
-                      <SubmitButton type="submit">Register</SubmitButton>
+                      <SubmitButton type="submit">
+                        {Registration.loading && (
+                          <CircularProgress sx={{ height: "20px" }} />
+                        )}
+                        Register
+                      </SubmitButton>
                     </div>
                   </Form>
                 )}

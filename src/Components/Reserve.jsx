@@ -2,19 +2,27 @@ import React, { Fragment, useEffect, useState, useContext } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { Box, Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import useFetch from "../Hooks/useFetch";
-import { SearchContext } from "../Context/searchContext";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { getRooms, updateRoomAvailability } from "../Redux/Actions/getRooms";
+import { alertActions } from "../Redux/Actions/alertActions";
+import AlertModal from "./AlertModal";
 
 function Reserve({ setShowModal, hotelId }) {
   const navigate = useNavigate();
   const [selectedRooms, setSelectedRooms] = useState([]);
 
-  const { data, loading, error } = useFetch(`/hotels/rooms/${hotelId}`);
-  console.log(data);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getRooms(hotelId));
+  }, [dispatch, hotelId]);
   // console.log(selectedRooms);
 
-  const { dates } = useContext(SearchContext);
+  const JourneyDetails = useSelector((state) => state.search);
+  const RoomsState = useSelector((state) => state.roomsReducer);
+  const Alert = useSelector((state) => state.alert);
+  // console.log(JourneyDetails);
 
   const getDatesInRange = (startDate, endDate) => {
     const start = new Date(startDate);
@@ -32,7 +40,10 @@ function Reserve({ setShowModal, hotelId }) {
     return datesList;
   };
 
-  const allDates = getDatesInRange(dates[0]?.startDate, dates[0]?.endDate);
+  const allDates = getDatesInRange(
+    JourneyDetails.dates[0]?.startDate,
+    JourneyDetails.dates[0]?.endDate
+  );
 
   const isAvailable = (oneRoom) => {
     const isFound = oneRoom.unavailableDates.some((date) =>
@@ -56,16 +67,19 @@ function Reserve({ setShowModal, hotelId }) {
     try {
       await Promise.all(
         selectedRooms.map((roomId) => {
-          const res = axios.put(`/rooms/updateRoomAvailability/${roomId}`, {
-            dates: allDates,
-          });
-          return res.data;
+          dispatch(updateRoomAvailability(roomId, allDates));
         })
       );
-      setShowModal(false);
-      navigate("/");
     } catch (err) {}
   };
+
+  useEffect(() => {
+    if (Alert.type === "success") {
+      setTimeout(() => {
+        navigate("/");
+      }, 3000);
+    }
+  }, [Alert, navigate]);
 
   return (
     <Fragment>
@@ -97,8 +111,9 @@ function Reserve({ setShowModal, hotelId }) {
           <Typography sx={{ fontSize: { xs: "10px", md: "13px" } }}>
             Select your rooms
           </Typography>
-          {Array.isArray(data) &&
-            data.map(
+          {Alert.message && <AlertModal show={true} />}
+          {Array.isArray(RoomsState.rooms) &&
+            RoomsState.rooms.map(
               (room, idx) =>
                 room !== null && (
                   <Box

@@ -1,10 +1,36 @@
 import { Box, Typography } from "@mui/material";
-import React, { Fragment, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { Fragment, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../Redux/Actions/login";
+import Avatar from "@mui/material/Avatar";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
 function Navbar() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const user = JSON.parse(localStorage.getItem("user"));
+
+  const LoginDetails = useSelector((state) => state.auth);
   // console.log("user", user);
+
+  const logoutFunction = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <Fragment>
@@ -34,16 +60,45 @@ function Navbar() {
             </Typography>
           </Link>
         </Box>
-        {user !== null ? (
-          <Typography
-            sx={{
-              color: "white",
-              fontWeight: "700",
-              fontSize: { xs: "12px", md: "16px" },
-            }}
-          >
-            {user.username}
-          </Typography>
+        {LoginDetails.token && user ? (
+          <>
+            <Box
+              id="demo-positioned-button"
+              aria-controls={open ? "demo-positioned-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              onClick={handleClick}
+              sx={{ display: "flex", alignItems: "center" }}
+            >
+              <Typography sx={{ color: "white", fontWeight: "700" }}>
+                {user.username}
+              </Typography>
+              <Avatar
+                src={user.profilePicture}
+                sx={{ ml: 2, cursor: "pointer" }}
+              />
+            </Box>
+            <Menu
+              id="demo-positioned-menu"
+              aria-labelledby="demo-positioned-button"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+            >
+              <MenuItem>
+                <Typography sx={{}}>My Profile</Typography>
+              </MenuItem>
+              <MenuItem onClick={logoutFunction}>Logout</MenuItem>
+            </Menu>
+          </>
         ) : (
           <Box sx={{ display: "flex", alignItems: "center", gap: "20px" }}>
             <Link

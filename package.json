@@ -53,5 +53,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://hb-2lht.onrender.com/api"
+  "proxy": "http://localhost:3499/api"
 }

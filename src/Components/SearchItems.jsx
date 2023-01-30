@@ -15,7 +15,7 @@ function SearchItems({ item }) {
             flexDirection: { xs: "column", md: "row" },
             alignItems: "center",
             borderRadius: "9px",
-            width: { xs: "90%", md: "100%" },
+            width: { xs: "95vw", md: "80vw" },
             height: { xs: "100%", md: "320px" },
             gap: { xs: "5px", md: "10px" },
             mb: { xs: "20px", md: 3 },

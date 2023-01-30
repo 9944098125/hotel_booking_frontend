@@ -1,11 +1,16 @@
 import React, { Fragment, useEffect } from "react";
 import { Box, CircularProgress, Typography } from "@mui/material";
-import useFetch from "../Hooks/useFetch";
+import { countByType } from "../Redux/Actions/countByCity";
+import { useDispatch, useSelector } from "react-redux";
 
 function PropertyList() {
-  // console.log(FeaturedHotelsTypes.data);
+  const dispatch = useDispatch();
 
-  const { data, error, loading } = useFetch("/hotels/countByType");
+  const GetCount = useSelector((state) => state.count);
+
+  useEffect(() => {
+    dispatch(countByType());
+  }, [dispatch]);
 
   const images = [
     "https://thumbs.dreamstime.com/b/hotel-rooms-8146308.jpg",
@@ -18,17 +23,7 @@ function PropertyList() {
   return (
     <Fragment>
       {/* property list */}
-      {loading ? (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <CircularProgress />
-        </Box>
-      ) : (
+      {GetCount.types && (
         <Box
           sx={{
             width: "100%",
@@ -41,7 +36,7 @@ function PropertyList() {
           }}
         >
           {/* item */}
-          {data &&
+          {GetCount.types &&
             images.map((image, i) => (
               <Box
                 key={i}
@@ -63,7 +58,7 @@ function PropertyList() {
                 />
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
                   <Typography sx={{ fontSize: "18px" }}>
-                    {data[i]?.count} {data[i]?.type}s
+                    {GetCount.types[i]?.count} {GetCount.types[i]?.type}s
                   </Typography>
                   <Typography sx={{ fontSize: "16px" }}></Typography>
                 </Box>

@@ -1,21 +1,23 @@
-import React, { Fragment, useState, useContext } from "react";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import React, { Fragment, useState, useContext, useEffect } from "react";
+import { Alert, Box, Button, TextField, Typography } from "@mui/material";
 import { Formik, Form, Field } from "formik";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { AuthContext } from "../Context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { login } from "../Redux/Actions/login";
+import { useDispatch, useSelector } from "react-redux";
+import AlertModal from "../Components/AlertModal";
 
 function Login() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [credentials] = useState({
     email: "",
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
 
-  const { loading, error, dispatch } = useContext(AuthContext);
-
-  const navigate = useNavigate();
+  const Alert = useSelector((state) => state.alert);
+  const LoginDetails = useSelector((state) => state.auth);
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -45,19 +47,21 @@ function Login() {
     return errors;
   };
 
-  const callLoginApi = async (values) => {
-    dispatch({ type: "LOGIN_START" });
-    try {
-      const res = await axios.post("/auth/login", values);
-      dispatch({ type: "LOGIN_SUCCESS", payload: res.data.details });
-      navigate("/");
-    } catch (err) {
-      dispatch({ type: "LOGIN_FAIL", payload: err.response.data });
+  const callLoginApi = (values) => {
+    if (values) {
+      dispatch(login(values));
     }
   };
 
+  useEffect(() => {
+    if (LoginDetails.token && LoginDetails.isAuthenticated) {
+      navigate("/");
+    }
+  }, [LoginDetails.token, LoginDetails.isAuthenticated, navigate]);
+
   return (
     <Fragment>
+      {Alert.message && <AlertModal show={true} />}
       <Box
         sx={{
           display: "flex",

@@ -13,9 +13,12 @@ import "react-date-range/dist/theme/default.css";
 import { DateRange } from "react-date-range";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
-import { SearchContext } from "../Context/searchContext";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../Redux/Actions/login";
+import { searchHotels } from "../Redux/Actions/search";
 
 function Header({ type }) {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [destination, setDestination] = useState("");
   const [dates, setDates] = useState([
@@ -35,6 +38,8 @@ function Header({ type }) {
 
   const user = JSON.parse(localStorage.getItem("user"));
 
+  const LoginDetails = useSelector((state) => state.auth);
+
   const toggleCalendar = () => {
     setShowCalendar(!showCalendar);
   };
@@ -53,10 +58,13 @@ function Header({ type }) {
     setShowOptions(!showOptions);
   };
 
-  const { dispatch } = useContext(SearchContext);
-
   const handleSearch = () => {
-    dispatch({ type: "NEW_SEARCH", payload: { dates, destination, options } });
+    const searchData = {
+      destination,
+      dates,
+      options,
+    };
+    dispatch(searchHotels(searchData));
     navigate("/hotels", { state: { destination, dates, options } });
   };
 
@@ -64,8 +72,8 @@ function Header({ type }) {
     navigate("/login");
   };
 
-  function logout() {
-    localStorage.removeItem("user");
+  function logoutFunction() {
+    dispatch(logout());
     navigate("/login");
   }
 
@@ -214,7 +222,24 @@ function Header({ type }) {
                   Get Rewarded for your travels - unlock instant savings of 10%
                   or more with a free Sunset Suties Account.
                 </Typography>
-                {!user ? (
+                {LoginDetails.token && user ? (
+                  <Button
+                    onClick={logoutFunction}
+                    sx={{
+                      backgroundColor: "white",
+                      p: "5px 15px 5px 15px",
+                      borderRadius: "9px",
+                      border: "none",
+                      width: { xs: "100px", md: "150px" },
+                      fontSize: { xs: "12px", md: "18px" },
+                      "&:hover": {
+                        backgroundColor: "white",
+                      },
+                    }}
+                  >
+                    Sign Out
+                  </Button>
+                ) : (
                   <Button
                     onClick={login}
                     sx={{
@@ -230,23 +255,6 @@ function Header({ type }) {
                     }}
                   >
                     Sign In
-                  </Button>
-                ) : (
-                  <Button
-                    onClick={logout}
-                    sx={{
-                      backgroundColor: "white",
-                      p: "5px 15px 5px 15px",
-                      borderRadius: "9px",
-                      border: "none",
-                      width: { xs: "100px", md: "150px" },
-                      fontSize: { xs: "12px", md: "18px" },
-                      "&:hover": {
-                        backgroundColor: "white",
-                      },
-                    }}
-                  >
-                    Sign Out
                   </Button>
                 )}
               </Box>

@@ -11,9 +11,11 @@ import Header from "../Components/Header";
 import { format } from "date-fns";
 import { DateRange } from "react-date-range";
 import SearchItems from "../Components/SearchItems";
-import useFetch from "../Hooks/useFetch";
+import { useDispatch, useSelector } from "react-redux";
+import { getHotels } from "../Redux/Actions/getHotels";
 
 function HotelsList() {
+  const dispatch = useDispatch();
   const location = useLocation();
 
   const [destination, setDestination] = useState(location.state.destination);
@@ -22,12 +24,13 @@ function HotelsList() {
   const [max, setMax] = useState(undefined);
   const [min, setMin] = useState(undefined);
 
-  const { data, loading, error, refetch } = useFetch(
-    `/hotels?city=${destination}&min=${min || 1}&max=${max || 99999}`
-  );
-  console.log(data);
-
   const [showDateRange, setShowDateRange] = useState(false);
+
+  useEffect(() => {
+    dispatch(getHotels(destination, min, max));
+  }, [dispatch, destination, min, max]);
+
+  const Hotels = useSelector((state) => state.getHotels);
 
   // console.log("hotels by city", HotelsWithQuery.featuredHotels);
 
@@ -36,7 +39,7 @@ function HotelsList() {
   };
 
   const clickSearch = () => {
-    refetch();
+    dispatch(getHotels(destination, min, max));
   };
   // console.log(location);
   return (
@@ -312,9 +315,9 @@ function HotelsList() {
             </Button>
           </Box>
           {/* list component, result rooms for search */}
-          {loading && <CircularProgress />}
-          {data &&
-            data.map((item, idx) => (
+          {Hotels.loading && <CircularProgress />}
+          {Hotels.hotels &&
+            Hotels.hotels.map((item, idx) => (
               <Box
                 sx={{
                   mt: 3,
