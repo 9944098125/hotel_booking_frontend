@@ -1,5 +1,11 @@
 import React, { Fragment, useState, useContext, useEffect } from "react";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Formik, Form, Field } from "formik";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
@@ -204,6 +210,11 @@ function Login() {
                     </div>
                     <div className="hoverParent">
                       <button type="submit" className="primary-button">
+                        {LoginDetails.loading && (
+                          <CircularProgress
+                            sx={{ height: "10px", width: "10px" }}
+                          />
+                        )}
                         Login
                       </button>
                       <Link
