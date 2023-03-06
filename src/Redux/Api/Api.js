@@ -1,7 +1,8 @@
 import Axios from "axios";
 
 const api = Axios.create({
-  baseURL: "http://localhost:3499/api/",
+  // baseURL: "http://localhost:3499/api/",
+  baseURL: "https://hotel-booking-backend-aw04.onrender.com/api",
   headers: {
     "Content-Type": "application/json",
   },
